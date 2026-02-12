@@ -1,0 +1,87 @@
+let foods = [
+  { name: "Pizza", price: 200 },
+  { name: "Burger", price: 150 },
+  { name: "Pasta", price: 180 }
+];
+
+let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+/* LOGIN */
+function login() {
+  let user = document.getElementById("username").value;
+  let pass = document.getElementById("password").value;
+
+  if (user && pass) {
+    localStorage.setItem("user", user);
+    window.location.href = "home.html";
+  } else {
+    alert("Enter username & password");
+  }
+}
+
+function logout() {
+  localStorage.removeItem("user");
+  window.location.href = "index.html";
+}
+
+/* HOME PAGE LOAD */
+if (document.getElementById("food-list")) {
+  let container = document.getElementById("food-list");
+
+  foods.forEach((food, index) => {
+    let div = document.createElement("div");
+    div.className = "food-card";
+    div.innerHTML = `
+      <h3>${food.name}</h3>
+      <p>₹${food.price}</p>
+      <button onclick="addToCart(${index})">Add</button>
+    `;
+    container.appendChild(div);
+  });
+
+  updateTotal();
+}
+
+/* ADD TO CART */
+function addToCart(index) {
+  let item = foods[index];
+  let existing = cart.find(f => f.name === item.name);
+
+  if (existing) {
+    existing.qty += 1;
+  } else {
+    cart.push({ ...item, qty: 1 });
+  }
+
+  localStorage.setItem("cart", JSON.stringify(cart));
+  updateTotal();
+}
+
+/* UPDATE TOTAL */
+function updateTotal() {
+  let total = cart.reduce((sum, item) => sum + item.price * item.qty, 0);
+  let totalSpan = document.getElementById("total");
+  if (totalSpan) totalSpan.textContent = total;
+}
+
+/* ORDER PAGE */
+if (document.getElementById("order-items")) {
+  let orderDiv = document.getElementById("order-items");
+  let total = 0;
+
+  cart.forEach(item => {
+    total += item.price * item.qty;
+    orderDiv.innerHTML += `
+      <p>${item.name} x ${item.qty} = ₹${item.price * item.qty}</p>
+    `;
+  });
+
+  document.getElementById("order-total").textContent = total;
+}
+
+/* PLACE ORDER */
+function placeOrder() {
+  alert("Order Placed Successfully!");
+  localStorage.removeItem("cart");
+  window.location.href = "home.html";
+}

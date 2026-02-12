@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Food Menu</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<h1>Welcome to Food App</h1>
+<button onclick="logout()" class="logout">Logout</button>
+
+<div class="container" id="food-list"></div>
+
+<h2>Total: ₹<span id="total">0</span></h2>
+<a href="order.html"><button class="order-btn">Go to Order Page</button></a>
+
+<script src="script.js"></script>
+</body>
+</html>
